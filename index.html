@@ -3,12 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is the mic on?</title>
-    <link rel="stylesheet" href="output.css">
+    <title>Roshan's Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 
 </head>
-<body>
-    <h1 class="bg-red-200 text-custom-blue font-heading">
-        Hello world!</h1>
+<body class="min-h-screen bg-gray-100 pt-6">
+    <!-- Sticky Header -->
+    <header class="sticky top-6 bg-white shadow-md z-50 p-4 mx-auto max-w-5xl rounded-lg">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Roshan's Portfolio</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#about" class="text-gray-700 hover:text-purple-500">About</a></li>
+                    <li><a href="#projects" class="text-gray-700 hover:text-purple-500">Projects</a></li>
+                    <li><a href="#contact" class="text-gray-700 hover:text-purple-500">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- About Me Section -->
+    <div class="flex items-center justify-center py-12">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-5xl flex flex-col md:flex-row p-8 min-h-[400px] md:min-h-[500px] items-center">
+            <!--! Left Content Section !-->
+            <div class="p-8 md:w-3/5">
+                <header class="mb-6">
+                    <h2 class="text-6xl font-bold text-gray-900 mb-4">about <span class="text-purple-500">me.</span></h2>
+                    <p class="text-gray-600">
+                        I am a student, aspiring software engineer, and a future fullstack developer. I am based in the suburban Atlanta area.
+                    </p>
+                </header>
+                <button class="mt-6 bg-red-500 text-white py-2 px-6 rounded-full hover:bg-red-600 transition duration-300" href="">
+                    See More
+                </button>
+            </div>
+            <!--! Right Image Section !-->
+            <div class="md:w-2/5 flex items-center justify-center p-8 bg-purple-400 relative rounded-3xl">
+                <!-- Note to self, replace "your-image.png with smthn else" -->
+                <img src="your-image.png" alt="some image" class="w-4/5 md:w-full max-w-xs md:max-w-none min-h-[200px] md:min-h-[300px] rounded-4xl">
+                <!-- <div class="absolute top-8 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-50"></div> -->
+                <!-- <div class="absolute bottom-15 right-10 w-16 h-16 bg-blue-300 rounded-full opacity-50"></div> -->
+            </div>
+        </div>
+    </div>
+
+
 </body>
 </html>

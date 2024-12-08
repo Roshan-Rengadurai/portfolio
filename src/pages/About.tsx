@@ -25,7 +25,6 @@ const About: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex items-center justify-center flex-grow">
-        <PageTransition>
           <div className="text-center bg-black bg-opacity-80 p-10 rounded-lg shadow-lg max-w-3xl w-full">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-8">
               about me
@@ -155,7 +154,6 @@ const About: React.FC = () => {
               </button>
             </NavLink>
           </div>
-        </PageTransition>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header.tsx";
-import PageTransition from "../components/PageTransition.tsx";
+
 const Home: React.FC = () => {
   return (
       <div className="min-h-screen bg-slate-900 bg-custom-bg flex flex-col bg-custom-pattern bg-cover bg-center p-12">
@@ -12,7 +12,6 @@ const Home: React.FC = () => {
 
         {/* Main Content */}
         <div className="flex items-center justify-center flex-grow">
-          <PageTransition>
           <div className="animate-appear text-center bg-black bg-opacity-80 p-10 rounded-lg shadow-lg max-w-3xl w-full">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
               fullstack dev, student, and creator.
@@ -29,7 +28,6 @@ const Home: React.FC = () => {
               HMU!
             </button>
           </div>
-          </PageTransition>
         </div>
       </div>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "../components/Header.tsx";
-import PageTransition from "../components/PageTransition.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faReact, 

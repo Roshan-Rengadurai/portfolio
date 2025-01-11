@@ -10,7 +10,7 @@ export const DATA = {
   description:
     "Full Stack Developer, Student, and Creator",
   summary:
-    "I am a full stack developer, student, and creator. I am currently a high school student in the metroplitan area and I am passionate about technology and innovation. With my dad as my inspiration for getting into the software field, I am dedicated to learning and growing in the field of software development.",
+    "I am a full stack developer, student, and creator. I am currently a high school student in the Atlanta metroplitan area and I am passionate about technology and innovation. With my dad as my inspiration for getting into the software field, I am dedicated to learning and growing in the field of software development.",
   avatarUrl: "/me.png",
   skills: [
     "React",
@@ -21,7 +21,18 @@ export const DATA = {
     "C++",
     "HTML",
     "Git/Github",
+    "Linux (Arch, Ubuntu)",
+    "TailwindCSS",
+    "Figma",
+    "Adobe Premire Pro",
+    "Adobe Photoshop",
     "Linux",
+    "Server Building",
+    "Version Control",
+    "Bash",
+    "MacOS",
+    "Windows",
+
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -89,7 +100,7 @@ export const DATA = {
       degree: "High School Diploma",
       logoUrl: "/lambert.png",
       start: "2023",
-      end: "2024",
+      end: "2027",
     },
   ],
   projects: [

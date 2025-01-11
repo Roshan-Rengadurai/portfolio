@@ -32,6 +32,7 @@ export const DATA = {
     "Bash",
     "MacOS",
     "Windows",
+    "Canva",
 
   ],
   navbar: [

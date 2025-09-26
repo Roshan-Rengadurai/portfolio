@@ -33,7 +33,10 @@ export const DATA = {
     "MacOS",
     "Windows",
     "Canva",
-
+    "Postman",
+    "Discord (Bots)",
+    "NASA APIs",
+    "REST APIs"
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -56,19 +59,6 @@ export const DATA = {
         icon: Icons.linkedin,
 
         navbar: true,
-      },
-      X: {
-        name: "X",
-        url: "https://dub.sh/dillion-twitter",
-        icon: Icons.x,
-
-        navbar: false,
-      },
-      Youtube: {
-        name: "Youtube",
-        url: "https://dub.sh/dillion-youtube",
-        icon: Icons.youtube,
-        navbar: false,
       },
       email: {
         name: "Send Email",
@@ -106,23 +96,26 @@ export const DATA = {
   ],
   projects: [
     {
-      title: "[WIP]",
-      href: "https://example.com",
+      title: "Mars Information",
+      href: "https://nasa-mars.vercel.app/",
       dates: "Jan 2024 - Feb 2024",
       active: false,
       description:
-        "Currently working on a project to help me learn more about the software development process. This is a temporary placeholder for my projects in the future. As of right now, I have no public projects to show.",
+        "Utilized NASA APIs (specifically Insight API) to gather and display data about Mars' weather and geological conditions, as well as Mars Rover Photos API to showcase the latest images captured by the rovers, specifically NASA's Curiosity, Opportunity, and Spirit rovers on Mars.",
       technologies: [
         "Next.js",
-        "Typescript",
+        "Typescript/Javascript",
         "TailwindCSS",
-        "Rust",
-        "Shadcn UI",
+        "REST APIs",
+        "Postman",
+        "NASA APIs",
+        "React",
+        "Vercel"
       ],
       links: [
         {
-          type: "Check Out My LinkedIn!",
-          href: "https://www.linkedin.com/in/roshan-rengadurai-22601a2b2/",
+          type: "Click here to view project",
+          href: "https://nasa-mars.vercel.app/",
           icon: <Icons.globe className="size-3" />,
         },
       ],

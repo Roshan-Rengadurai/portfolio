@@ -11,9 +11,11 @@ import { SiteHeader } from "@/components/site-header";
 import { CornerReadouts } from "@/components/hud/corner-readouts";
 import { ParticleField } from "@/components/hud/particle-field";
 import { BottomNav } from "@/components/bottom-nav";
+import { CommandPalette } from "@/components/command-palette";
+import { NavHint } from "@/components/nav-hint";
 import { SoundProvider } from "@/lib/sound";
 
-export type ViewId = "home" | "github" | "projects" | "terminal";
+export type ViewId = "home" | "education" | "github" | "projects" | "terminal";
 
 type ViewCtx = { active: ViewId; setActive: (v: ViewId) => void };
 const ViewContext = createContext<ViewCtx | null>(null);
@@ -70,6 +72,8 @@ export function AppShell({
         </main>
 
         <BottomNav />
+        <NavHint />
+        <CommandPalette />
       </div>
       </SoundProvider>
     </ViewContext.Provider>

@@ -26,14 +26,16 @@ export function ParticleField() {
     const pointer = { x: -9999, y: -9999, active: false };
 
     // Colors are re-read whenever the theme class flips (see observer below).
-    let bg = "#1d2021";
-    let dotColor = "#504945";
+    let bg = "#16181a";
+    let dotColor = "#5c534a";
     let accent = "#fabd2f";
+    let accent2 = "#fe8019";
     const readColors = () => {
       const css = getComputedStyle(document.documentElement);
-      bg = css.getPropertyValue("--bg").trim() || "#1d2021";
-      dotColor = css.getPropertyValue("--border-strong").trim() || "#504945";
+      bg = css.getPropertyValue("--bg").trim() || "#16181a";
+      dotColor = css.getPropertyValue("--border-strong").trim() || "#5c534a";
       accent = css.getPropertyValue("--accent").trim() || "#fabd2f";
+      accent2 = css.getPropertyValue("--accent-strong").trim() || "#fe8019";
     };
     readColors();
 
@@ -68,10 +70,10 @@ export function ParticleField() {
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
       ctx.fillStyle = dotColor;
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = 0.34;
       for (const d of dots) {
         ctx.beginPath();
-        ctx.arc(d.gx, d.gy, 1.1, 0, Math.PI * 2);
+        ctx.arc(d.gx, d.gy, 1, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
@@ -82,12 +84,13 @@ export function ParticleField() {
       ctx.fillRect(0, 0, width, height);
 
       for (const d of dots) {
-        // subtle ambient breathing so the grid is alive without a cursor
+        // gentle ambient breathing so the grid is alive without a cursor —
+        // small amplitude keeps the resting field calm and unobtrusive
         const wave =
-          Math.sin(d.gx * 0.012 + t * 0.9) +
-          Math.cos(d.gy * 0.012 - t * 0.7);
-        let x = d.gx + wave * 0.9;
-        let y = d.gy + wave * 0.9;
+          Math.sin(d.gx * 0.012 + t * 0.55) +
+          Math.cos(d.gy * 0.012 - t * 0.45);
+        let x = d.gx + wave * 0.5;
+        let y = d.gy + wave * 0.5;
 
         let influence = 0;
 
@@ -120,17 +123,30 @@ export function ParticleField() {
           }
         }
 
-        const radius = 1.1 + influence * 2.2;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        if (influence > 0.06) {
-          ctx.fillStyle = accent;
-          ctx.globalAlpha = 0.4 + influence * 0.6;
+        if (influence > 0.05) {
+          // vibrant, warm gradient toward the cursor: yellow ring → orange core,
+          // wrapped in a soft glow halo so the interaction zone lights up
+          const radius = 1.1 + influence * 2.6;
+          const color = influence > 0.5 ? accent2 : accent;
+
+          ctx.fillStyle = color;
+          ctx.globalAlpha = influence * 0.22;
+          ctx.beginPath();
+          ctx.arc(x, y, radius * 2.7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.globalAlpha = 0.5 + influence * 0.5;
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
         } else {
+          // calm resting grid — dim and quiet so content stays the focus
           ctx.fillStyle = dotColor;
-          ctx.globalAlpha = 0.45;
+          ctx.globalAlpha = 0.32;
+          ctx.beginPath();
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
+          ctx.fill();
         }
-        ctx.fill();
       }
 
       // draw + advance the shockwave rings

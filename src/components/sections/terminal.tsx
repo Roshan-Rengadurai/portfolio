@@ -6,6 +6,7 @@ import { profile } from "@/data/profile";
 import { Section, SectionHeading } from "@/components/section";
 import { MatrixRain } from "@/components/matrix-rain";
 import { useSound } from "@/lib/sound";
+import { cn } from "@/lib/utils";
 
 type Line =
   | { kind: "cmd"; text: string }
@@ -72,6 +73,30 @@ export function TerminalSection() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+
+  // Custom caret: glides to the character position instead of jumping.
+  const [caretPos, setCaretPos] = useState(0);
+  const [caretX, setCaretX] = useState(0);
+  const [focused, setFocused] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const typingTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  const syncCaret = () =>
+    setCaretPos(inputRef.current?.selectionStart ?? value.length);
+
+  // Measure after render so the caret lands on the real glyph boundary.
+  useEffect(() => {
+    setCaretX(measureRef.current?.offsetWidth ?? 0);
+  }, [value, caretPos]);
+
+  // Hold the caret solid while typing, then let it resume breathing.
+  useEffect(() => {
+    if (!typing) return;
+    clearTimeout(typingTimer.current);
+    typingTimer.current = setTimeout(() => setTyping(false), 420);
+    return () => clearTimeout(typingTimer.current);
+  }, [typing, value, caretPos]);
 
   const print = (node: ReactNode) =>
     setLines((prev) => [...prev, { kind: "out", node }]);
@@ -115,6 +140,7 @@ export function TerminalSection() {
               ["projects", "what I'm building"],
               ["github", "open my GitHub"],
               ["linkedin", "open my LinkedIn"],
+              ["email", "get in touch"],
               ["neofetch", "system info, the fun way"],
               ["cmatrix", "follow the white rabbit"],
               ["cowsay <text>", "a cow says your words"],
@@ -172,10 +198,20 @@ export function TerminalSection() {
         );
         window.open(profile.links.linkedin, "_blank", "noopener");
         break;
+      case "email":
+      case "contact":
+        print(
+          <span className="text-muted">
+            reach me at{" "}
+            <ExtLink href={profile.links.email}>{profile.email}</ExtLink>
+          </span>
+        );
+        window.location.href = profile.links.email;
+        break;
       case "neofetch": {
         const up = Math.max(1, Math.round((Date.now() - bootedAt.current) / 1000));
         const info: [string, string][] = [
-          ["host", "roshan"],
+          ["host", "roshan-rengadurai.vercel.app"],
           ["os", "PortfolioOS (web)"],
           ["shell", "rsh 1.0"],
           ["theme", resolvedTheme ?? "dark"],
@@ -263,25 +299,30 @@ export function TerminalSection() {
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setTyping(true);
     if (e.key === "Enter") {
       play("nav");
       run(value);
       setValue("");
+      setCaretPos(0);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       const h = history.current;
       if (h.length) {
         histIndex.current = Math.min(histIndex.current + 1, h.length - 1);
         setValue(h[histIndex.current]);
+        setCaretPos(h[histIndex.current].length);
       }
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       if (histIndex.current > 0) {
         histIndex.current -= 1;
         setValue(history.current[histIndex.current]);
+        setCaretPos(history.current[histIndex.current].length);
       } else {
         histIndex.current = -1;
         setValue("");
+        setCaretPos(0);
       }
     } else if (e.key.length === 1 || e.key === "Backspace") {
       play("key");
@@ -294,13 +335,14 @@ export function TerminalSection() {
 
       <div
         onClick={() => inputRef.current?.focus()}
-        className="overflow-hidden rounded-xl border border-border-strong bg-surface/90 font-mono text-sm shadow-2xl shadow-black/30 backdrop-blur-sm"
+        className="glass overflow-hidden rounded-xl font-mono text-sm"
       >
-        <div className="flex items-center gap-1.5 border-b border-border bg-surface-2/80 px-4 py-2.5">
-          <span className="size-3 rounded-full bg-[#fb4934]" />
-          <span className="size-3 rounded-full bg-[#fabd2f]" />
-          <span className="size-3 rounded-full bg-[#b8bb26]" />
-          <span className="ml-2 text-xs text-faint">
+        <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
+          <span className="relative flex size-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
+          </span>
+          <span className="text-xs text-faint">
             rsh — {profile.githubUsername}
           </span>
         </div>
@@ -327,18 +369,45 @@ export function TerminalSection() {
             <label htmlFor="term-input" className="shrink-0 text-accent-strong">
               {PROMPT}
             </label>
-            <input
-              id="term-input"
-              ref={inputRef}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={onKeyDown}
-              spellCheck={false}
-              autoComplete="off"
-              autoCapitalize="off"
-              aria-label="Terminal command input"
-              className="min-w-0 flex-1 bg-transparent text-ink caret-accent outline-none"
-            />
+            <div className="relative min-w-0 flex-1">
+              <input
+                id="term-input"
+                ref={inputRef}
+                value={value}
+                onChange={(e) => {
+                  setValue(e.target.value);
+                  setCaretPos(e.target.selectionStart ?? e.target.value.length);
+                  setTyping(true);
+                }}
+                onKeyDown={onKeyDown}
+                onSelect={syncCaret}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                spellCheck={false}
+                autoComplete="off"
+                autoCapitalize="off"
+                aria-label="Terminal command input"
+                className="w-full bg-transparent text-ink caret-transparent outline-none"
+              />
+              {/* hidden measurer: width of the text before the caret */}
+              <span
+                ref={measureRef}
+                aria-hidden="true"
+                className="pointer-events-none invisible absolute left-0 top-0 whitespace-pre"
+              >
+                {value.slice(0, caretPos)}
+              </span>
+              {focused && (
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "caret pointer-events-none absolute left-0 top-1/2 h-[1.15em] w-[2px] -translate-y-1/2 rounded-sm bg-accent",
+                    typing && "caret-typing"
+                  )}
+                  style={{ transform: `translate(${caretX}px, -50%)` }}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { AppShell } from "@/components/app-shell";
 import { Hero } from "@/components/sections/hero";
+import { Education } from "@/components/sections/education";
 import { GithubContributions } from "@/components/sections/github-contributions";
 import { Projects } from "@/components/sections/projects";
 import { TerminalSection } from "@/components/sections/terminal";
@@ -9,6 +10,7 @@ export default function Page() {
     <AppShell
       views={{
         home: <Hero />,
+        education: <Education />,
         github: <GithubContributions />,
         projects: <Projects />,
         terminal: <TerminalSection />,

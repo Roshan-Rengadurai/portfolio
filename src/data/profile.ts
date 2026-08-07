@@ -5,9 +5,11 @@ export const profile = {
   headline: " developer, student, engineer",
   url: "https://roshan-rengadurai.vercel.app",
   githubUsername: "Roshan-Rengadurai",
+  email: "roshan.rengadurai@gmail.com",
   links: {
     github: "https://github.com/Roshan-Rengadurai",
     linkedin: "https://www.linkedin.com/in/roshan-rengadurai-22601a2b2/",
+    email: "mailto:roshan.rengadurai@gmail.com",
   },
   education: [
     {

@@ -41,50 +41,29 @@ export function useViewportSize() {
   return size;
 }
 
-/** Pointer position in px, rAF-throttled so it re-renders at most once per frame. */
-export function usePointer() {
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
-  useEffect(() => {
-    let frame = 0;
-    let latest = { x: 0, y: 0 };
-    const onMove = (e: PointerEvent) => {
-      latest = { x: e.clientX, y: e.clientY };
-      if (!frame) {
-        frame = requestAnimationFrame(() => {
-          frame = 0;
-          setPos(latest);
-        });
-      }
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", onMove);
-    };
-  }, []);
-  return pos;
-}
+export type GithubStats = {
+  followers: number;
+  repos: number;
+  stars: number;
+  lastPush: string | null;
+};
 
-/** Live frames-per-second, sampled roughly twice a second. */
-export function useFps() {
-  const [fps, setFps] = useState<number | null>(null);
+/** Fetches live GitHub stats from our cached API route (once, on mount). */
+export function useGithubStats() {
+  const [stats, setStats] = useState<GithubStats | null>(null);
   useEffect(() => {
-    let raf = 0;
-    let frames = 0;
-    let last = performance.now();
-    const loop = (t: number) => {
-      frames++;
-      if (t - last >= 500) {
-        setFps(Math.round((frames * 1000) / (t - last)));
-        frames = 0;
-        last = t;
-      }
-      raf = requestAnimationFrame(loop);
+    let alive = true;
+    fetch("/api/github")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: GithubStats | null) => {
+        if (alive && data && typeof data.followers === "number") setStats(data);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
     };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
   }, []);
-  return fps;
+  return stats;
 }
 
 /** Respects the OS "reduce motion" preference and reacts to changes. */

@@ -36,7 +36,7 @@ export function SectionHeading({
         <p className="font-mono text-xs text-faint">
           <span className="text-accent-strong">cd</span> ~/{path}
         </p>
-        <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+        <h2 className="mt-1.5 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
           {title}
         </h2>
       </div>

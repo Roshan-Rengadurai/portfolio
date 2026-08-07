@@ -37,6 +37,7 @@ const config = {
         content: "10",
         hud: "40",
         nav: "50",
+        modal: "100",
       },
     },
   },

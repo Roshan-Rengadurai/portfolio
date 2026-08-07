@@ -1,6 +1,13 @@
-import { ArrowUpRight, Hammer } from "lucide-react";
+import { ArrowUpRight, Crop, Vibrate } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { profile } from "@/data/profile";
+import { projects } from "@/data/projects";
 import { Section, SectionHeading } from "@/components/section";
+
+const icons: Record<string, LucideIcon> = {
+  vibrate: Vibrate,
+  crop: Crop,
+};
 
 export function Projects() {
   return (
@@ -19,34 +26,69 @@ export function Projects() {
         }
       />
 
-      <div className="rounded-xl border border-dashed border-border-strong bg-surface/80 p-8 text-center sm:p-12">
-        <span className="mx-auto mb-4 grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
-          <Hammer className="size-5" strokeWidth={1.75} />
-        </span>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {projects.map((project) => {
+          const Icon = icons[project.icon];
+          return (
+            <a
+              key={project.slug}
+              href={project.href}
+              target="_blank"
+              rel="noreferrer"
+              className="focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-colors hover:border-border-strong"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
+                  {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : null}
+                </span>
+                <span className="inline-flex items-center gap-1.5 font-mono text-xs text-faint">
+                  <span className="size-1.5 rounded-full bg-accent" />
+                  {project.status}
+                </span>
+              </div>
 
-        <h3 className="text-lg font-semibold text-ink">
-          Under construction
-        </h3>
-        <p className="mx-auto mt-2 max-w-[46ch] text-pretty text-sm leading-relaxed text-muted">
-          I&apos;m building a few things right now. Once they&apos;re worth
-          showing, they&apos;ll land here. Until then, the work happens in the
-          open.
+              <h3 className="mt-4 flex items-center gap-1.5 text-lg font-semibold text-ink">
+                {project.name}
+                <ArrowUpRight
+                  className="size-4 text-muted transition-colors group-hover:text-accent-strong"
+                  strokeWidth={2}
+                />
+              </h3>
+
+              <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">
+                {project.blurb}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-xs text-faint">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-md border border-border bg-surface-2 px-2 py-0.5"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-border-strong bg-surface/80 px-5 py-4">
+        <p className="font-mono text-xs text-faint">
+          <span className="text-accent-strong">$</span> git commit -m
+          &quot;more coming soon&quot;
         </p>
 
         <a
           href={profile.links.github}
           target="_blank"
           rel="noreferrer"
-          className="focus-ring mt-6 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+          className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
         >
-          Browse the code on GitHub
+          Browse all on GitHub
           <ArrowUpRight className="size-4" strokeWidth={2} />
         </a>
-
-        <p className="mt-6 font-mono text-xs text-faint">
-          <span className="text-accent-strong">$</span> git commit -m
-          &quot;coming soon&quot;
-        </p>
       </div>
     </Section>
   );

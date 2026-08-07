@@ -1,29 +1,27 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { profile } from "@/data/profile";
-import { useView } from "@/components/app-shell";
-import { useSound } from "@/lib/sound";
+import { Section } from "@/components/section";
+import { HeroTitle } from "@/components/sections/hero-title";
 
 export function Hero() {
-  const { setActive } = useView();
-  const { play } = useSound();
   const [first, ...rest] = profile.name.split(" ");
   const last = rest.join(" ");
 
   return (
-    <section id="home" className="w-full">
+    <Section id="home">
+      {/* intro */}
       <p className="reveal font-mono text-sm text-accent-strong" style={{ ["--i" as string]: 0 }}>
         <span className="text-faint">$</span> whoami
       </p>
 
-      <h1
-        className="reveal mt-4 text-balance font-semibold leading-[0.95] tracking-tight text-ink"
+      <HeroTitle
+        first={first}
+        last={last}
+        className="reveal mt-4 text-balance font-bold leading-[0.95] tracking-tight text-ink"
         style={{ ["--i" as string]: 1, fontSize: "clamp(2.75rem, 9vw, 5.5rem)" }}
-      >
-        {first}
-        <br />
-        <span className="text-muted">{last}</span>
-      </h1>
+      />
 
       <p
         className="reveal mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted sm:text-xl"
@@ -33,7 +31,7 @@ export function Hero() {
       </p>
 
       <div
-        className="reveal mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-faint"
+        className="reveal mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-faint"
         style={{ ["--i" as string]: 3 }}
       >
         <span className="inline-flex items-center gap-2">
@@ -46,15 +44,31 @@ export function Hero() {
         <span className="hidden text-border-strong sm:inline">/</span>
         <button
           type="button"
-          onClick={() => {
-            play("nav");
-            setActive("terminal");
-          }}
+          onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
           className="focus-ring hidden text-muted transition-colors hover:text-accent-strong sm:inline"
         >
-          or open the terminal, it&apos;s real →
+          press ⌘K for commands →
         </button>
       </div>
-    </section>
+
+      {/* contact — mirrors the Projects footer CTA */}
+      <div
+        className="reveal mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-border-strong bg-surface/80 px-5 py-4"
+        style={{ ["--i" as string]: 4 }}
+      >
+        <p className="font-mono text-xs text-faint">
+          <span className="text-accent-strong">$</span> mail -s &quot;let&apos;s
+          build something&quot;
+        </p>
+
+        <a
+          href={profile.links.email}
+          className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+        >
+          <Mail className="size-4" strokeWidth={2} />
+          Email me
+        </a>
+      </div>
+    </Section>
   );
 }

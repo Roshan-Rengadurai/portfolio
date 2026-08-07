@@ -2,6 +2,7 @@
 
 import {
   Home,
+  GraduationCap,
   Github,
   FolderGit2,
   SquareTerminal,
@@ -24,6 +25,7 @@ type Tab = { id: ViewId; label: string; icon: LucideIcon };
 
 const TABS: Tab[] = [
   { id: "home", label: "Home", icon: Home },
+  { id: "education", label: "Education", icon: GraduationCap },
   { id: "github", label: "GitHub", icon: Github },
   { id: "projects", label: "Projects", icon: FolderGit2 },
   { id: "terminal", label: "Terminal", icon: SquareTerminal },
@@ -33,12 +35,14 @@ const TABS: Tab[] = [
 function Tip({
   label,
   children,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <span className="group relative flex">
+    <span className={cn("group relative flex", className)}>
       {children}
       <span
         role="tooltip"
@@ -50,12 +54,16 @@ function Tip({
   );
 }
 
+// 44px on mobile (touch minimum, and keeps the dock inside a 375px viewport);
+// a little roomier from sm up, where there's space for it.
 const iconBtn =
-  "focus-ring flex size-11 items-center justify-center rounded-full text-muted transition-colors hover:text-ink";
+  "focus-ring flex size-11 sm:size-12 items-center justify-center rounded-full text-muted transition-colors hover:text-ink";
+
+const iconSize = "size-[18px] sm:size-5";
 
 export function BottomNav() {
   const { active, setActive } = useView();
-  const { play, enabled, mounted: soundMounted } = useSound();
+  const { enabled, mounted: soundMounted } = useSound();
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
   const { toggle: toggleSound } = useSound();
@@ -63,7 +71,6 @@ export function BottomNav() {
   const isDark = resolvedTheme === "dark";
 
   const select = (id: ViewId) => {
-    if (id !== active) play("nav");
     setActive(id);
   };
 
@@ -73,7 +80,7 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-3 z-nav flex justify-center px-3 sm:bottom-5"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="flex items-center gap-0.5 rounded-full border border-border bg-surface/80 p-1 shadow-lg shadow-black/25 backdrop-blur-md">
+      <div className="glass flex items-center gap-0.5 rounded-full p-1 sm:gap-1 sm:p-1.5">
         {/* section navigation */}
         {TABS.map((tab) => {
           const isActive = active === tab.id;
@@ -83,7 +90,6 @@ export function BottomNav() {
               <button
                 type="button"
                 onClick={() => select(tab.id)}
-                onPointerEnter={() => play("tick")}
                 aria-current={isActive ? "page" : undefined}
                 aria-label={tab.label}
                 className={cn(
@@ -100,7 +106,7 @@ export function BottomNav() {
                   />
                 )}
                 <Icon
-                  className="size-[18px]"
+                  className={iconSize}
                   strokeWidth={isActive ? 2.25 : 1.75}
                 />
               </button>
@@ -110,29 +116,27 @@ export function BottomNav() {
 
         <span className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
 
-        {/* external links + settings */}
-        <Tip label="GitHub ↗">
+        {/* external links (hidden on small screens — reachable via ⌘K) + settings */}
+        <Tip label="GitHub ↗" className="hidden sm:flex">
           <a
             href={profile.links.github}
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub profile (opens in new tab)"
-            onPointerEnter={() => play("tick")}
             className={iconBtn}
           >
-            <Github className="size-[18px]" strokeWidth={1.75} />
+            <Github className={iconSize} strokeWidth={1.75} />
           </a>
         </Tip>
-        <Tip label="LinkedIn ↗">
+        <Tip label="LinkedIn ↗" className="hidden sm:flex">
           <a
             href={profile.links.linkedin}
             target="_blank"
             rel="noreferrer"
             aria-label="LinkedIn profile (opens in new tab)"
-            onPointerEnter={() => play("tick")}
             className={iconBtn}
           >
-            <Linkedin className="size-[18px]" strokeWidth={1.75} />
+            <Linkedin className={iconSize} strokeWidth={1.75} />
           </a>
         </Tip>
         <Tip label={soundMounted && !enabled ? "Sound off" : "Sound on"}>
@@ -146,19 +150,16 @@ export function BottomNav() {
             className={iconBtn}
           >
             {soundMounted && !enabled ? (
-              <VolumeX className="size-[18px]" strokeWidth={1.75} />
+              <VolumeX className={iconSize} strokeWidth={1.75} />
             ) : (
-              <Volume2 className="size-[18px]" strokeWidth={1.75} />
+              <Volume2 className={iconSize} strokeWidth={1.75} />
             )}
           </button>
         </Tip>
         <Tip label={mounted && isDark ? "Light" : "Dark"}>
           <button
             type="button"
-            onClick={() => {
-              play("toggle");
-              setTheme(isDark ? "light" : "dark");
-            }}
+            onClick={() => setTheme(isDark ? "light" : "dark")}
             aria-label={
               mounted
                 ? `Switch to ${isDark ? "light" : "dark"} theme`
@@ -168,12 +169,12 @@ export function BottomNav() {
           >
             {mounted ? (
               isDark ? (
-                <Sun className="size-[18px]" strokeWidth={1.75} />
+                <Sun className={iconSize} strokeWidth={1.75} />
               ) : (
-                <Moon className="size-[18px]" strokeWidth={1.75} />
+                <Moon className={iconSize} strokeWidth={1.75} />
               )
             ) : (
-              <span className="size-[18px]" />
+              <span className={iconSize} />
             )}
           </button>
         </Tip>

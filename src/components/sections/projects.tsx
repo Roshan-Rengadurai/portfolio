@@ -27,7 +27,7 @@ export function Projects() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {projects.map((project) => {
+        {projects.map((project, i) => {
           const Icon = icons[project.icon];
           return (
             <a
@@ -35,10 +35,11 @@ export function Projects() {
               href={project.href}
               target="_blank"
               rel="noreferrer"
-              className="focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-colors hover:border-border-strong"
+              style={{ ["--i" as string]: i }}
+              className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-border-strong hover:shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
             >
               <div className="flex items-start justify-between gap-3">
-                <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
+                <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 group-hover:scale-110 group-active:scale-95 group-active:rotate-0">
                   {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : null}
                 </span>
                 <span className="inline-flex items-center gap-1.5 font-mono text-xs text-faint">
@@ -74,7 +75,10 @@ export function Projects() {
         })}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-border-strong bg-surface/80 px-5 py-4">
+      <div
+        style={{ ["--i" as string]: projects.length }}
+        className="reveal mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-border-strong bg-surface/80 px-5 py-4"
+      >
         <p className="font-mono text-xs text-faint">
           <span className="text-accent-strong">$</span> git commit -m
           &quot;more coming soon&quot;

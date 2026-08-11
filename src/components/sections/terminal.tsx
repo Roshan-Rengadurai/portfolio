@@ -343,7 +343,7 @@ export function TerminalSection() {
             <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
           </span>
           <span className="text-xs text-faint">
-            rsh — {profile.githubUsername}
+            rsh - {profile.githubUsername}
           </span>
         </div>
 

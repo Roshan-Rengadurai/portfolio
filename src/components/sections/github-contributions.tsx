@@ -228,7 +228,7 @@ export async function GithubContributions() {
                     <div
                       key={`${wi}-${di}`}
                       title={`${day.count} on ${day.date}`}
-                      className="size-[11px] rounded-[2px]"
+                      className="relative size-[11px] rounded-[2px] transition-transform duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 hover:scale-125"
                       style={{ backgroundColor: LEVEL_BG[day.level] }}
                     />
                   ) : (

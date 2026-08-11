@@ -28,6 +28,8 @@ const config = {
           strong: "var(--accent-strong)",
           ink: "var(--accent-ink)",
         },
+        danger: "var(--danger)",
+        success: "var(--success)",
       },
       maxWidth: {
         content: "56rem",

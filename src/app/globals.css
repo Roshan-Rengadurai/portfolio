@@ -16,6 +16,8 @@
     --accent: #b57614; /* faded yellow */
     --accent-strong: #af3a03; /* faded orange for text emphasis */
     --accent-ink: #fbf1c7;
+    --danger: #9d0006; /* gruvbox faded red, form errors only */
+    --success: #427b58; /* gruvbox faded green, form success only */
     /* particle palette (gruvbox faded accents, readable on light) */
     --p1: #b57614;
     --p2: #427b58;
@@ -39,6 +41,8 @@
     --accent: #fabd2f; /* bright yellow */
     --accent-strong: #fe8019; /* bright orange for emphasis */
     --accent-ink: #1d2021;
+    --danger: #fb4934; /* gruvbox bright red, form errors only */
+    --success: #b8bb26; /* gruvbox bright green, form success only */
     /* particle palette (gruvbox bright accents, glow on dark) */
     --p1: #fabd2f;
     --p2: #b8bb26;

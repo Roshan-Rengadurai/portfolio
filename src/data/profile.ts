@@ -10,6 +10,7 @@ export const profile = {
     github: "https://github.com/Roshan-Rengadurai",
     linkedin: "https://www.linkedin.com/in/roshan-rengadurai-22601a2b2/",
     email: "mailto:roshan.rengadurai@gmail.com",
+    cal: "https://cal.com/Roshan-Rengadurai",
   },
   education: [
     {

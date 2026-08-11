@@ -12,6 +12,7 @@ import { CornerReadouts } from "@/components/hud/corner-readouts";
 import { ParticleField } from "@/components/hud/particle-field";
 import { BottomNav } from "@/components/bottom-nav";
 import { CommandPalette } from "@/components/command-palette";
+import { EmailModal } from "@/components/email-modal";
 import { NavHint } from "@/components/nav-hint";
 import { SoundProvider } from "@/lib/sound";
 
@@ -74,6 +75,7 @@ export function AppShell({
         <BottomNav />
         <NavHint />
         <CommandPalette />
+        <EmailModal />
       </div>
       </SoundProvider>
     </ViewContext.Provider>

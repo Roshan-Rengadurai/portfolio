@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { Mail, CalendarDays } from "lucide-react";
 import { profile } from "@/data/profile";
 import { Section } from "@/components/section";
 import { HeroTitle } from "@/components/sections/hero-title";
@@ -61,13 +61,25 @@ export function Hero() {
           build something&quot;
         </p>
 
-        <a
-          href={profile.links.email}
-          className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
-        >
-          <Mail className="size-4" strokeWidth={2} />
-          Email me
-        </a>
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href={profile.links.cal}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg border border-border-strong px-4 text-sm font-medium text-ink transition-colors hover:bg-surface-2"
+          >
+            <CalendarDays className="size-4" strokeWidth={2} />
+            Book a call
+          </a>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("open-email-modal"))}
+            className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+          >
+            <Mail className="size-4" strokeWidth={2} />
+            Email me
+          </button>
+        </div>
       </div>
     </Section>
   );

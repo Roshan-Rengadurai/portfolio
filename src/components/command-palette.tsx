@@ -224,10 +224,17 @@ export function CommandPalette() {
                       onClick={cmd.run}
                       onPointerMove={() => setIndex(i)}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-                        active ? "bg-surface-2 text-ink" : "text-muted"
+                        "relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-[color,transform] duration-100 active:scale-[0.98]",
+                        active ? "text-ink" : "text-muted"
                       )}
                     >
+                      {active && (
+                        <motion.span
+                          layoutId="cmdk-active-row"
+                          className="absolute inset-0 -z-10 rounded-lg bg-surface-2"
+                          transition={{ type: "spring", stiffness: 500, damping: 45 }}
+                        />
+                      )}
                       <span
                         className={cn(
                           "grid size-8 shrink-0 place-items-center rounded-md border border-border bg-surface-2",

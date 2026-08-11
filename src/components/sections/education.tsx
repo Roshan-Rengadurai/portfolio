@@ -17,20 +17,21 @@ export function Education() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {profile.education.map((edu) => (
+        {profile.education.map((edu, i) => (
           <a
             key={edu.school}
             href={edu.href}
             target="_blank"
             rel="noreferrer"
-            className="focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-colors hover:border-border-strong"
+            style={{ ["--i" as string]: i }}
+            className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-border-strong hover:shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
           >
             <div className="flex items-start justify-between gap-3">
-              <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
+              <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 group-hover:scale-110 group-active:scale-95 group-active:rotate-0">
                 <GraduationCap className="size-5" strokeWidth={1.75} />
               </span>
               <span className="font-mono text-xs text-faint">
-                {edu.start}–{edu.end}
+                {edu.start}-{edu.end}
               </span>
             </div>
 

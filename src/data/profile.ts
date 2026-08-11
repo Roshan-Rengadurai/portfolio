@@ -2,7 +2,7 @@ export const profile = {
   name: "Roshan Rengadurai",
   initials: "RR",
   // Short, understated headline.
-  headline: " developer, student, engineer",
+  headline: "developer, student, engineer",
   url: "https://roshan-rengadurai.vercel.app",
   githubUsername: "Roshan-Rengadurai",
   email: "roshan.rengadurai@gmail.com",

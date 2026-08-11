@@ -161,3 +161,84 @@ export function useVisibleRaf(
     };
   }, [elementRef, enabled]);
 }
+
+/**
+ * Cursor-magnetism for a group of elements inside `containerRef`: elements
+ * marked `data-magnetic` lean gently toward the pointer within `radius` and
+ * spring back to rest once it leaves. Same imperative rAF-lerp technique as
+ * the hero title's letter warp (direct transform, no React state) so the
+ * "the interface leans toward you" language shows up in the dock too.
+ */
+export function useMagnetic(
+  containerRef: React.RefObject<HTMLElement>,
+  {
+    radius = 70,
+    max = 6,
+    enabled = true,
+  }: { radius?: number; max?: number; enabled?: boolean } = {}
+) {
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    if (reduced || !enabled) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const els = Array.from(
+      container.querySelectorAll<HTMLElement>("[data-magnetic]")
+    );
+    const n = els.length;
+    if (!n) return;
+
+    const curX = new Float32Array(n);
+    const curY = new Float32Array(n);
+    const pointer = { x: -9999, y: -9999, active: false };
+    const K = 0.22; // lerp toward target
+
+    let raf = 0;
+    const frame = () => {
+      for (let i = 0; i < n; i++) {
+        const r = els[i].getBoundingClientRect();
+        const cx = r.left + r.width / 2 - curX[i];
+        const cy = r.top + r.height / 2 - curY[i];
+
+        let tx = 0;
+        let ty = 0;
+        if (pointer.active) {
+          const dx = pointer.x - cx;
+          const dy = pointer.y - cy;
+          const dist = Math.hypot(dx, dy) || 1;
+          if (dist < radius) {
+            const f = 1 - dist / radius;
+            const ff = f * f;
+            tx = (dx / dist) * ff * max;
+            ty = (dy / dist) * ff * max;
+          }
+        }
+
+        curX[i] += (tx - curX[i]) * K;
+        curY[i] += (ty - curY[i]) * K;
+        els[i].style.transform = `translate(${curX[i].toFixed(2)}px, ${curY[
+          i
+        ].toFixed(2)}px)`;
+      }
+      raf = requestAnimationFrame(frame);
+    };
+
+    const onMove = (e: PointerEvent) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      pointer.active = true;
+    };
+    const onLeave = () => (pointer.active = false);
+
+    container.addEventListener("pointermove", onMove);
+    container.addEventListener("pointerleave", onLeave);
+    raf = requestAnimationFrame(frame);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      container.removeEventListener("pointermove", onMove);
+      container.removeEventListener("pointerleave", onLeave);
+    };
+  }, [containerRef, reduced, enabled, radius, max]);
+}

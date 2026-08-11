@@ -17,7 +17,7 @@ export const projects: readonly Project[] = [
     slug: "bump",
     name: "Bump",
     blurb:
-      "Control your Mac with taps — bump the chassis or trackpad to trigger mute, lock, screenshot, and more. A free, native alternative to paid tap-control apps.",
+      "Control your Mac with taps: bump the chassis or trackpad to trigger mute, lock, screenshot, and more. A free, native alternative to paid tap-control apps.",
     tags: ["macOS", "Swift", "open source"],
     status: "early",
     icon: "vibrate",
@@ -27,7 +27,7 @@ export const projects: readonly Project[] = [
     slug: "nab",
     name: "Nab",
     blurb:
-      "Screenshot to a clean, shareable link — straight to a storage bucket you own. Region capture, syntax-highlighted code snippets, and S3-compatible uploads with no middleman.",
+      "Screenshot to a clean, shareable link, straight to a storage bucket you own. Region capture, syntax-highlighted code snippets, and S3-compatible uploads with no middleman.",
     tags: ["macOS", "Swift", "S3"],
     status: "in progress",
     icon: "crop",

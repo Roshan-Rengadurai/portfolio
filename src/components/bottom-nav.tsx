@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import {
   Home,
   GraduationCap,
@@ -17,7 +18,7 @@ import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useView, type ViewId } from "@/components/app-shell";
 import { useSound } from "@/lib/sound";
-import { useMounted } from "@/lib/hooks";
+import { useMagnetic, useMounted } from "@/lib/hooks";
 import { profile } from "@/data/profile";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +58,7 @@ function Tip({
 // 44px on mobile (touch minimum, and keeps the dock inside a 375px viewport);
 // a little roomier from sm up, where there's space for it.
 const iconBtn =
-  "focus-ring flex size-11 sm:size-12 items-center justify-center rounded-full text-muted transition-colors hover:text-ink";
+  "focus-ring flex size-11 sm:size-12 items-center justify-center rounded-full text-muted transition-[color,transform] duration-100 hover:text-ink active:scale-90";
 
 const iconSize = "size-[18px] sm:size-5";
 
@@ -67,6 +68,8 @@ export function BottomNav() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
   const { toggle: toggleSound } = useSound();
+  const dockRef = useRef<HTMLDivElement>(null);
+  useMagnetic(dockRef, { radius: 64, max: 5, enabled: mounted });
 
   const isDark = resolvedTheme === "dark";
 
@@ -80,7 +83,10 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-3 z-nav flex justify-center px-3 sm:bottom-5"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="glass flex items-center gap-0.5 rounded-full p-1 sm:gap-1 sm:p-1.5">
+      <div
+        ref={dockRef}
+        className="glass flex items-center gap-0.5 rounded-full p-1 sm:gap-1 sm:p-1.5"
+      >
         {/* section navigation */}
         {TABS.map((tab) => {
           const isActive = active === tab.id;
@@ -106,6 +112,7 @@ export function BottomNav() {
                   />
                 )}
                 <Icon
+                  data-magnetic
                   className={iconSize}
                   strokeWidth={isActive ? 2.25 : 1.75}
                 />
@@ -125,7 +132,7 @@ export function BottomNav() {
             aria-label="GitHub profile (opens in new tab)"
             className={iconBtn}
           >
-            <Github className={iconSize} strokeWidth={1.75} />
+            <Github data-magnetic className={iconSize} strokeWidth={1.75} />
           </a>
         </Tip>
         <Tip label="LinkedIn ↗" className="hidden sm:flex">
@@ -136,7 +143,7 @@ export function BottomNav() {
             aria-label="LinkedIn profile (opens in new tab)"
             className={iconBtn}
           >
-            <Linkedin className={iconSize} strokeWidth={1.75} />
+            <Linkedin data-magnetic className={iconSize} strokeWidth={1.75} />
           </a>
         </Tip>
         <Tip label={soundMounted && !enabled ? "Sound off" : "Sound on"}>
@@ -150,9 +157,9 @@ export function BottomNav() {
             className={iconBtn}
           >
             {soundMounted && !enabled ? (
-              <VolumeX className={iconSize} strokeWidth={1.75} />
+              <VolumeX data-magnetic className={iconSize} strokeWidth={1.75} />
             ) : (
-              <Volume2 className={iconSize} strokeWidth={1.75} />
+              <Volume2 data-magnetic className={iconSize} strokeWidth={1.75} />
             )}
           </button>
         </Tip>
@@ -169,9 +176,9 @@ export function BottomNav() {
           >
             {mounted ? (
               isDark ? (
-                <Sun className={iconSize} strokeWidth={1.75} />
+                <Sun data-magnetic className={iconSize} strokeWidth={1.75} />
               ) : (
-                <Moon className={iconSize} strokeWidth={1.75} />
+                <Moon data-magnetic className={iconSize} strokeWidth={1.75} />
               )
             ) : (
               <span className={iconSize} />

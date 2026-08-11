@@ -13,7 +13,7 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-const dash = "—";
+const dash = "-";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function CornerReadouts() {

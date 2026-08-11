@@ -83,9 +83,36 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       master.connect(comp).connect(ac.destination);
       masterRef.current = master;
     }
-    if (audioRef.current.state === "suspended") audioRef.current.resume();
+    if (audioRef.current.state === "suspended") {
+      audioRef.current.resume().catch(() => {});
+    }
     return audioRef.current;
   }, []);
+
+  // Unlock audio on the very first trusted gesture anywhere on the page.
+  // Browsers only allow AudioContext.resume() to succeed inside a genuine
+  // user gesture (pointerdown / keydown / touchstart) — hover doesn't count,
+  // and most of this page (particle field, hero text) isn't a button/link,
+  // so without this, the first real gesture that happens to land on a
+  // control is the earliest point sound could ever start. Unconditional and
+  // selector-independent on purpose: it must fire on literally any first
+  // click or keypress, not just ones that land on interactive elements.
+  useEffect(() => {
+    const unlock = () => {
+      ensureCtx();
+      window.removeEventListener("pointerdown", unlock, true);
+      window.removeEventListener("keydown", unlock, true);
+      window.removeEventListener("touchstart", unlock, true);
+    };
+    window.addEventListener("pointerdown", unlock, true);
+    window.addEventListener("keydown", unlock, true);
+    window.addEventListener("touchstart", unlock, true);
+    return () => {
+      window.removeEventListener("pointerdown", unlock, true);
+      window.removeEventListener("keydown", unlock, true);
+      window.removeEventListener("touchstart", unlock, true);
+    };
+  }, [ensureCtx]);
 
   /** A short reusable white-noise buffer, built once, for click transients. */
   const noiseBuffer = useCallback((ac: AudioContext) => {

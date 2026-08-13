@@ -190,7 +190,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         // hover: a lighter, deep tactile tick (fires on every hover, so subtle)
         case "tick":
           noise(0.005, 0.03, 900);
-          blip(150, 0.035, 0.04, "sine", 115);
+          blip(150, 0.035, 0.12, "sine", 115);
           break;
         // command run / view change: a fuller, deeper thock
         case "nav":
@@ -202,7 +202,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
           noise(0.006, 0.06, 1100);
           blip(150, 0.06, 0.07, "triangle", 95);
           break;
-        // toggle: a deep thunk that rises for the "on" feel
+        // toggle: a deep thunk 
         case "toggle":
           noise(0.01, 0.075, 1100);
           blip(130, 0.18, 0.1, "sine", 210);

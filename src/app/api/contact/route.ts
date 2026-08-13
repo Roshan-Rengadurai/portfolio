@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     const { error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: profile.email,
-      subject: `[Site] ${subject}`,
+      subject: `[Portfolio] ${subject}`,
       replyTo: replyTo || undefined,
       text: `${message}${replyTo ? `\n\n— reply-to: ${replyTo}` : ""}`,
       html: `<p>${escapeHtml(message).replace(/\n/g, "<br/>")}</p>${

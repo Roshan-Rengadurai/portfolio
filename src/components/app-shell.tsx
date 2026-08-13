@@ -14,6 +14,7 @@ import { BottomNav } from "@/components/bottom-nav";
 import { CommandPalette } from "@/components/command-palette";
 import { EmailModal } from "@/components/email-modal";
 import { NavHint } from "@/components/nav-hint";
+import { BootSequence } from "@/components/boot-sequence";
 import { SoundProvider } from "@/lib/sound";
 
 export type ViewId = "home" | "education" | "github" | "projects" | "terminal";
@@ -33,11 +34,13 @@ export function AppShell({
   views: Record<ViewId, ReactNode>;
 }) {
   const [active, setActive] = useState<ViewId>("home");
+  const [booted, setBooted] = useState(false);
   const reduced = useReducedMotion();
 
   return (
     <ViewContext.Provider value={{ active, setActive }}>
       <SoundProvider>
+      <BootSequence onDone={() => setBooted(true)} />
       <ParticleField />
 
       <div className="relative z-content flex h-dvh flex-col">
@@ -47,27 +50,29 @@ export function AppShell({
         <main className="relative flex flex-1 items-center justify-center overflow-hidden px-5 pb-28 pt-20 sm:px-8">
           <div className="flex max-h-full w-full max-w-content items-center justify-center overflow-y-auto">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={active}
-                className="w-full"
-                initial={
-                  reduced
-                    ? false
-                    : { opacity: 0, y: 18, scale: 0.985, filter: "blur(8px)" }
-                }
-                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                exit={
-                  reduced
-                    ? { opacity: 0 }
-                    : { opacity: 0, y: -12, scale: 0.99, filter: "blur(8px)" }
-                }
-                transition={{
-                  duration: reduced ? 0.12 : 0.4,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {views[active]}
-              </motion.div>
+              {booted && (
+                <motion.div
+                  key={active}
+                  className="w-full"
+                  initial={
+                    reduced
+                      ? false
+                      : { opacity: 0, y: 18, scale: 0.985, filter: "blur(8px)" }
+                  }
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  exit={
+                    reduced
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: -12, scale: 0.99, filter: "blur(8px)" }
+                  }
+                  transition={{
+                    duration: reduced ? 0.12 : 0.4,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  {views[active]}
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </main>

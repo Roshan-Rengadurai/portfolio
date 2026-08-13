@@ -40,6 +40,7 @@ const config = {
         hud: "40",
         nav: "50",
         modal: "100",
+        boot: "200",
       },
     },
   },

@@ -3,18 +3,16 @@ import { Hero } from "@/components/sections/hero";
 import { Education } from "@/components/sections/education";
 import { GithubContributions } from "@/components/sections/github-contributions";
 import { Projects } from "@/components/sections/projects";
-import { TerminalSection } from "@/components/sections/terminal";
+import { SiteFooter } from "@/components/site-footer";
 
 export default function Page() {
   return (
-    <AppShell
-      views={{
-        home: <Hero />,
-        education: <Education />,
-        github: <GithubContributions />,
-        projects: <Projects />,
-        terminal: <TerminalSection />,
-      }}
-    />
+    <AppShell>
+      <Hero />
+      <Education />
+      <GithubContributions />
+      <Projects />
+      <SiteFooter />
+    </AppShell>
   );
 }

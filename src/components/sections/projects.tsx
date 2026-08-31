@@ -2,7 +2,7 @@ import { ArrowUpRight, Crop, Vibrate } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
-import { Section, SectionHeading } from "@/components/section";
+import { Section } from "@/components/section";
 
 const icons: Record<string, LucideIcon> = {
   vibrate: Vibrate,
@@ -11,22 +11,8 @@ const icons: Record<string, LucideIcon> = {
 
 export function Projects() {
   return (
-    <Section id="projects">
-      <SectionHeading
-        path="projects"
-        title="Projects"
-        aside={
-          <span className="inline-flex items-center gap-1.5">
-            <span className="relative flex size-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
-            </span>
-            WIP
-          </span>
-        }
-      />
-
-      <div className="grid gap-4 sm:grid-cols-2">
+    <Section id="projects" title="Projects" aside="Two in the open, more on the way.">
+      <div className="grid gap-4 md:grid-cols-2">
         {projects.map((project, i) => {
           const Icon = icons[project.icon];
           return (
@@ -36,19 +22,16 @@ export function Projects() {
               target="_blank"
               rel="noreferrer"
               style={{ ["--i" as string]: i }}
-              className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-border-strong hover:shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+              className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[border-color] duration-200 hover:border-border-strong sm:p-8"
             >
               <div className="flex items-start justify-between gap-3">
-                <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 group-hover:scale-110 group-active:scale-95 group-active:rotate-0">
+                <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
                   {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : null}
                 </span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-xs text-faint">
-                  <span className="size-1.5 rounded-full bg-accent" />
-                  {project.status}
-                </span>
+                <span className="text-xs text-faint">{project.status}</span>
               </div>
 
-              <h3 className="mt-4 flex items-center gap-1.5 text-lg font-semibold text-ink">
+              <h3 className="mt-5 flex items-center gap-1.5 text-xl font-semibold text-ink">
                 {project.name}
                 <ArrowUpRight
                   className="size-4 text-muted transition-colors group-hover:text-accent-strong"
@@ -56,11 +39,11 @@ export function Projects() {
                 />
               </h3>
 
-              <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">
+              <p className="mt-2 max-w-[60ch] text-pretty text-sm leading-relaxed text-muted">
                 {project.blurb}
               </p>
 
-              <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-xs text-faint">
+              <div className="mt-auto flex flex-wrap gap-1.5 pt-6 font-mono text-xs text-faint">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
@@ -77,20 +60,19 @@ export function Projects() {
 
       <div
         style={{ ["--i" as string]: projects.length }}
-        className="reveal mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-border-strong bg-surface/80 px-5 py-4"
+        className="reveal mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface/80 px-6 py-5"
       >
-        <p className="font-mono text-xs text-faint">
-          <span className="text-accent-strong">$</span> git commit -m
-          &quot;more coming soon&quot;
+        <p className="text-sm text-muted">
+          Everything I build in the open lives on GitHub.
         </p>
 
         <a
           href={profile.links.github}
           target="_blank"
           rel="noreferrer"
-          className="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+          className="focus-ring inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
         >
-          Browse all on GitHub
+          View on GitHub
           <ArrowUpRight className="size-4" strokeWidth={2} />
         </a>
       </div>

@@ -1,6 +1,6 @@
 import { Github, ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
-import { Section, SectionHeading } from "@/components/section";
+import { Section } from "@/components/section";
 
 type Level = 0 | 1 | 2 | 3 | 4;
 type Day = { date: string; count: number; level: Level };
@@ -152,6 +152,18 @@ function GraphFallback() {
   );
 }
 
+/** One computed figure. All values come from the real contribution data. */
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="min-w-0">
+      <p className="font-mono text-xl font-semibold tabular-nums text-ink sm:text-2xl">
+        {value}
+      </p>
+      <p className="mt-0.5 text-xs leading-snug text-muted">{label}</p>
+    </div>
+  );
+}
+
 export async function GithubContributions() {
   const data = await getContributions();
 
@@ -160,7 +172,7 @@ export async function GithubContributions() {
       href={profile.links.github}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-ink"
+      className="link-underline inline-flex items-center gap-1.5"
     >
       <Github className="size-3.5" strokeWidth={1.75} />@{profile.githubUsername}
     </a>
@@ -168,8 +180,7 @@ export async function GithubContributions() {
 
   if (!data?.contributions?.length) {
     return (
-      <Section id="github">
-        <SectionHeading path="github" title="Contributions" aside={aside} />
+      <Section id="github" title="Contributions" aside={aside}>
         <GraphFallback />
       </Section>
     );
@@ -178,38 +189,51 @@ export async function GithubContributions() {
   const total = data.total;
   const weeks = toWeeks(data.contributions);
 
-  // Month labels: place a label at the first week each month appears.
+  const activeDays = data.contributions.filter((d) => d.count > 0).length;
+  const busiest = data.contributions.reduce(
+    (best, d) => (d.count > best.count ? d : best),
+    data.contributions[0]
+  );
+
+  // Month labels: one at the first week of each month. A label is ~3 columns
+  // wide, so drop any that would land on top of the one before it (which is
+  // what happens when the graph starts mid-month).
+  let lastLabelAt = -Infinity;
   const monthLabels = weeks.map((week, i) => {
     const firstReal = week.find((d) => d);
     if (!firstReal) return null;
     const m = new Date(`${firstReal.date}T00:00:00`).getMonth();
     const prev = weeks[i - 1]?.find((d) => d);
-    const prevM = prev
-      ? new Date(`${prev.date}T00:00:00`).getMonth()
-      : -1;
-    return m !== prevM ? MONTHS[m] : null;
+    const prevM = prev ? new Date(`${prev.date}T00:00:00`).getMonth() : -1;
+    if (m === prevM || i - lastLabelAt < 3) return null;
+    lastLabelAt = i;
+    return MONTHS[m];
   });
 
   return (
-    <Section id="github">
-      <SectionHeading path="github" title="Contributions" aside={aside} />
+    <Section id="github" title="Contributions" aside={aside}>
+      <div className="min-w-0 rounded-xl border border-border bg-surface/90 p-4 sm:p-6">
+        <div className="mb-5 grid grid-cols-3 gap-3 border-b border-border pb-4 sm:mb-6 sm:gap-4 sm:pb-5">
+          <Stat value={total.toLocaleString()} label="In the last year" />
+          <Stat value={activeDays.toLocaleString()} label="Days with commits" />
+          <Stat value={busiest.count.toLocaleString()} label="Busiest day" />
+        </div>
 
-      <div className="rounded-xl border border-border bg-surface/90 p-4 sm:p-6">
-        <p className="mb-4 text-sm text-muted">
-          <span className="font-mono font-semibold text-ink">
-            {total.toLocaleString()}
-          </span>{" "}
-          contributions in the last year.
-        </p>
-
-        <div className="overflow-x-auto pb-1">
-          <div className="inline-flex min-w-max flex-col gap-1.5">
+        {/* One fractional column per week, so the graph stretches to fill the
+            card on wide screens and scrolls horizontally below its min width. */}
+        <div className="scroll-slim overflow-x-auto pb-1">
+          <div
+            className="flex min-w-[560px] flex-col gap-1.5"
+            style={{
+              ["--cols" as string]: weeks.length,
+            }}
+          >
             {/* month labels */}
-            <div className="flex gap-[3px] pl-0">
+            <div className="grid gap-[3px] [grid-template-columns:repeat(var(--cols),minmax(0,1fr))]">
               {monthLabels.map((label, i) => (
                 <div
                   key={i}
-                  className="w-[11px] font-mono text-[9px] text-faint"
+                  className="whitespace-nowrap font-mono text-[10px] text-faint"
                 >
                   {label ?? ""}
                 </div>
@@ -218,7 +242,7 @@ export async function GithubContributions() {
 
             {/* grid */}
             <div
-              className="grid grid-flow-col grid-rows-7 gap-[3px]"
+              className="grid grid-flow-col grid-rows-7 gap-[3px] [grid-template-columns:repeat(var(--cols),minmax(0,1fr))]"
               role="img"
               aria-label={`GitHub contribution graph: ${total.toLocaleString()} contributions in the last year`}
             >
@@ -228,11 +252,11 @@ export async function GithubContributions() {
                     <div
                       key={`${wi}-${di}`}
                       title={`${day.count} on ${day.date}`}
-                      className="relative size-[11px] rounded-[2px] transition-transform duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 hover:scale-125"
+                      className="relative aspect-square w-full rounded-[2px] transition-transform duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 hover:scale-125"
                       style={{ backgroundColor: LEVEL_BG[day.level] }}
                     />
                   ) : (
-                    <div key={`${wi}-${di}`} className="size-[11px]" />
+                    <div key={`${wi}-${di}`} className="aspect-square w-full" />
                   )
                 )
               )}

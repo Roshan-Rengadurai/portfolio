@@ -19,17 +19,17 @@ const fontMono = JetBrains_Mono({
 });
 
 const description =
-  "A student developer's playground. Built from scratch, with a live GitHub graph, a paintable Game of Life, and a terminal you can type into.";
+  "Roshan Rengadurai — a student developer building native macOS apps and open-source tools. Projects, live GitHub activity, and a few things to poke at.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.url),
   title: {
-    default: `${profile.name} · Engineer`,
+    default: `${profile.name} · Developer`,
     template: `%s · ${profile.name}`,
   },
   description,
   openGraph: {
-    title: `${profile.name} · Engineer`,
+    title: `${profile.name} · Developer`,
     description,
     url: profile.url,
     siteName: profile.name,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} · Engineer`,
+    title: `${profile.name} · Developer`,
     description,
   },
   robots: { index: true, follow: true },

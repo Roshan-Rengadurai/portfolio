@@ -20,6 +20,17 @@
 .DS_Store
 *.pem
 
+# editors
+/.idea
+/.vscode
+
+# tool caches
+.impeccable
+
+# this project uses pnpm; a second lockfile makes installs ambiguous
+package-lock.json
+yarn.lock
+
 # debug
 npm-debug.log*
 yarn-debug.log*

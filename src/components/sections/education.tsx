@@ -1,22 +1,11 @@
 import { ArrowUpRight, GraduationCap } from "lucide-react";
 import { profile } from "@/data/profile";
-import { Section, SectionHeading } from "@/components/section";
+import { Section } from "@/components/section";
 
 export function Education() {
   return (
-    <Section id="education">
-      <SectionHeading
-        path="education"
-        title="Education"
-        aside={
-          <span className="inline-flex items-center gap-1.5">
-            <GraduationCap className="size-3.5" strokeWidth={1.75} />
-            class of 2027
-          </span>
-        }
-      />
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <Section id="education" title="Education" aside="Class of 2027">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {profile.education.map((edu, i) => (
           <a
             key={edu.school}
@@ -24,13 +13,13 @@ export function Education() {
             target="_blank"
             rel="noreferrer"
             style={{ ["--i" as string]: i }}
-            className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-border-strong hover:shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+            className="reveal focus-ring group flex flex-col rounded-xl border border-border bg-surface/90 p-6 transition-[border-color] duration-200 hover:border-border-strong"
           >
             <div className="flex items-start justify-between gap-3">
-              <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 group-hover:scale-110 group-active:scale-95 group-active:rotate-0">
+              <span className="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-accent">
                 <GraduationCap className="size-5" strokeWidth={1.75} />
               </span>
-              <span className="font-mono text-xs text-faint">
+              <span className="font-mono text-xs tabular-nums text-faint">
                 {edu.start}-{edu.end}
               </span>
             </div>

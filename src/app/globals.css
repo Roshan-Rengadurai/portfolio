@@ -62,18 +62,30 @@
     border-color: var(--border);
   }
 
-  html,
-  body {
-    height: 100%;
-  }
-
   html {
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    /* NOTE: no scroll-padding here. Sections carry their own `scroll-mt-*`,
+       and setting both stacks the two offsets, dropping anchored sections far
+       below the viewport top. */
+    /* NOTE: no overflow-x here or on <body>. Root-element overflow propagates
+       to the viewport, so either value breaks programmatic scrolling and the
+       scroll-spy. Wide content (the contribution graph) scrolls in its own
+       container instead. */
   }
 
   body {
-    overflow: hidden;
+    min-height: 100dvh;
     background-color: var(--bg);
+    /* a near-invisible static dot grid — texture, not decoration */
+    background-image: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--border-strong) 45%, transparent) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 32px 32px;
+    background-position: center;
+    background-attachment: fixed;
     color: var(--ink);
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
@@ -119,30 +131,36 @@
   }
 
   /**
-   * Shared glass surface — the dock and the terminal must look like the same
-   * material. Built on --glass, which sits *below* --bg in both themes, so a
-   * panel always reads as a recess cut into the field rather than a card on
-   * top of it. Kept quiet on purpose: no sheen, a soft blur, a shadow that
-   * barely lifts it — a calm surface, not a skeuomorphic window.
+   * The dock's surface. Built on --glass, which sits a step below --bg in both
+   * themes, so the dock reads as a recess rather than a card floating on top.
+   * Blurred so page content passing beneath it stays legible.
    */
   .glass {
-    background-color: color-mix(in oklab, var(--glass) 88%, transparent);
+    background-color: color-mix(in oklab, var(--glass) 90%, transparent);
     -webkit-backdrop-filter: blur(16px) saturate(1.15);
     backdrop-filter: blur(16px) saturate(1.15);
     border: 1px solid var(--border-strong);
     box-shadow: 0 8px 24px -16px rgb(0 0 0 / 0.45);
   }
 
-  /* Small floating chrome (header chips) — same material, lighter blur. */
-  .glass-chip {
-    background-color: color-mix(in oklab, var(--glass) 72%, transparent);
-    -webkit-backdrop-filter: blur(14px) saturate(1.3);
-    backdrop-filter: blur(14px) saturate(1.3);
+  /**
+   * Slim scrollbar for panes that scroll inside the page (the contribution
+   * graph on narrow screens). The global 8px bar reads as a heavy slab when
+   * it sits inside a card.
+   */
+  .scroll-slim {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
   }
-
-  /* legibility for HUD text sitting directly over the animated field */
-  .hud-text {
-    text-shadow: 0 1px 3px var(--bg), 0 0 8px var(--bg);
+  .scroll-slim::-webkit-scrollbar {
+    height: 6px;
+  }
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
   }
 }
 
@@ -151,11 +169,14 @@
     font-family: var(--font-mono), ui-monospace, monospace;
     font-feature-settings: "zero", "cv01";
   }
+  /* one-shot entrance for above-the-fold content; sections lower on the page
+     have finished by the time they scroll into view, so they just read as
+     present. */
   .reveal {
     opacity: 0;
     transform: translateY(12px);
-    animation: reveal 0.65s var(--e-out-expo) forwards;
-    animation-delay: calc(var(--i, 0) * 70ms);
+    animation: reveal 0.6s var(--e-out-expo) forwards;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
 
   /* terminal caret: glides between characters, breathes instead of hard-blinking */

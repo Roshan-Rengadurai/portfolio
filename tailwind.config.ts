@@ -3,11 +3,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -32,15 +28,12 @@ const config = {
         success: "var(--success)",
       },
       maxWidth: {
-        content: "56rem",
+        content: "90rem",
       },
       zIndex: {
-        particles: "0",
         content: "10",
-        hud: "40",
         nav: "50",
         modal: "100",
-        boot: "200",
       },
     },
   },

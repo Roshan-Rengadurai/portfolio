@@ -1,48 +1,48 @@
 import { cn } from "@/lib/utils";
 
-/** A view body. The shell handles centering/max-width; this just spaces content. */
+/**
+ * A page section. On large screens the title sits in a narrow left rail and the
+ * content takes the remaining width, so the page uses the full viewport instead
+ * of a single centred column. Below `lg` it collapses to a normal stack.
+ */
 export function Section({
   id,
+  title,
+  aside,
   className,
   children,
 }: {
   id: string;
+  title: string;
+  aside?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn("w-full", className)}>
-      {children}
-    </section>
-  );
-}
+    <section
+      id={id}
+      className={cn(
+        "scroll-mt-4 border-t border-border py-16 sm:py-20 lg:py-24",
+        className
+      )}
+    >
+      <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
+        <div className="min-w-0 lg:col-span-3">
+          {/* Stacked on small screens; a sticky rail once there's room beside it. */}
+          <div className="lg:sticky lg:top-24">
+            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+              {title}
+            </h2>
+            {aside ? (
+              <p className="mt-1.5 text-sm text-muted lg:mt-2">{aside}</p>
+            ) : null}
+          </div>
+        </div>
 
-/**
- * Section heading using the site's terminal/path metaphor as one unit
- * (not a stacked eyebrow): a faint mono `cd ~/path` prefix + the title.
- */
-export function SectionHeading({
-  path,
-  title,
-  aside,
-}: {
-  path: string;
-  title: string;
-  aside?: React.ReactNode;
-}) {
-  return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
-      <div>
-        <p className="font-mono text-xs text-faint">
-          <span className="text-accent-strong">cd</span> ~/{path}
-        </p>
-        <h2 className="mt-1.5 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          {title}
-        </h2>
+        {/* min-w-0: grid items default to min-width:auto, which would let wide
+            children (the contribution graph) blow out the page width. */}
+        <div className="min-w-0 lg:col-span-9">{children}</div>
       </div>
-      {aside ? (
-        <div className="font-mono text-xs text-muted">{aside}</div>
-      ) : null}
-    </div>
+    </section>
   );
 }

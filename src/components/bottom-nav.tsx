@@ -6,6 +6,7 @@ import {
   GraduationCap,
   Github,
   FolderGit2,
+  Linkedin,
   Moon,
   Sun,
   type LucideIcon,
@@ -18,6 +19,7 @@ import {
 } from "framer-motion";
 import { useTheme } from "next-themes";
 import { SECTIONS, type SectionId } from "@/components/app-shell";
+import { profile } from "@/data/profile";
 import { useMounted } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 
@@ -209,6 +211,31 @@ export function BottomNav() {
         })}
 
         <span className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
+
+        {/* External profiles. Hidden on the narrowest screens, where the dock
+            is already full — the footer carries the same two links. */}
+        <Tip label="GitHub ↗" className="hidden sm:flex">
+          <a
+            href={profile.links.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub profile (opens in new tab)"
+            className={iconBtn}
+          >
+            <Github className={iconSize} strokeWidth={1.75} />
+          </a>
+        </Tip>
+        <Tip label="LinkedIn ↗" className="hidden sm:flex">
+          <a
+            href={profile.links.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn profile (opens in new tab)"
+            className={iconBtn}
+          >
+            <Linkedin className={iconSize} strokeWidth={1.75} />
+          </a>
+        </Tip>
 
         <Tip label={mounted && isDark ? "Light" : "Dark"}>
           <button

@@ -30,7 +30,7 @@ type Tab = { id: SectionId; label: string; icon: LucideIcon };
 const TABS: Tab[] = [
   { id: "home", label: "Home", icon: Home },
   { id: "education", label: "Education", icon: GraduationCap },
-  { id: "github", label: "GitHub", icon: Github },
+  { id: "github", label: "Contributions", icon: Github },
   { id: "projects", label: "Projects", icon: FolderGit2 },
 ];
 

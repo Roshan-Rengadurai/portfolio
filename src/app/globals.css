@@ -70,8 +70,7 @@
        below the viewport top. */
     /* NOTE: no overflow-x here or on <body>. Root-element overflow propagates
        to the viewport, so either value breaks programmatic scrolling and the
-       scroll-spy. Wide content (the contribution graph) scrolls in its own
-       container instead. */
+       scroll-spy. */
   }
 
   body {
@@ -141,26 +140,6 @@
     backdrop-filter: blur(16px) saturate(1.15);
     border: 1px solid var(--border-strong);
     box-shadow: 0 8px 24px -16px rgb(0 0 0 / 0.45);
-  }
-
-  /**
-   * Slim scrollbar for panes that scroll inside the page (the contribution
-   * graph on narrow screens). The global 8px bar reads as a heavy slab when
-   * it sits inside a card.
-   */
-  .scroll-slim {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-strong) transparent;
-  }
-  .scroll-slim::-webkit-scrollbar {
-    height: 6px;
-  }
-  .scroll-slim::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .scroll-slim::-webkit-scrollbar-thumb {
-    background: var(--border-strong);
-    border-radius: 999px;
   }
 }
 

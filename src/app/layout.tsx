@@ -19,7 +19,7 @@ const fontMono = JetBrains_Mono({
 });
 
 const description =
-  "Roshan Rengadurai — a student developer building native macOS apps and open-source tools. Projects, live GitHub activity, and a few things to poke at.";
+  "Roshan Rengadurai — a student developer building native macOS apps and open-source tools. Projects, school, and a way to get in touch.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.url),
@@ -66,8 +66,8 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
           {children}

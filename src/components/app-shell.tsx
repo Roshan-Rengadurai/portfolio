@@ -4,7 +4,7 @@ import { EmailModal } from "@/components/email-modal";
 import { ConsoleOverlay } from "@/components/console-overlay";
 
 /** Section ids, in page order — the scroll-spy nav reads this list. */
-export const SECTIONS = ["home", "education", "github", "projects"] as const;
+export const SECTIONS = ["home", "education", "projects"] as const;
 export type SectionId = (typeof SECTIONS)[number];
 
 export function AppShell({ children }: { children: ReactNode }) {

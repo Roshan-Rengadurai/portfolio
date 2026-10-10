@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
 import { useMounted } from "@/lib/hooks";
 import { Console } from "@/components/console";
 
@@ -78,10 +77,9 @@ export function ConsoleOverlay() {
             <button
               type="button"
               onClick={close}
-              aria-label="Close console"
-              className="focus-ring absolute right-2 top-2 z-10 grid size-11 place-items-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-ink"
+              className="focus-ring absolute right-1 top-0.5 z-10 h-11 rounded-lg px-3 font-mono text-xs text-muted transition-colors hover:bg-surface-2 hover:text-ink"
             >
-              <X className="size-5" strokeWidth={2} />
+              esc
             </button>
             <Console />
           </motion.div>

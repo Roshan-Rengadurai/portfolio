@@ -39,8 +39,6 @@ export function Section({
           </div>
         </div>
 
-        {/* min-w-0: grid items default to min-width:auto, which would let wide
-            children (the contribution graph) blow out the page width. */}
         <div className="min-w-0 lg:col-span-9">{children}</div>
       </div>
     </section>

@@ -7,8 +7,6 @@ export type Project = {
   tags: readonly string[];
   /** Terminal-style status, e.g. "early", "in progress". */
   status: string;
-  /** Lucide icon name, resolved in the section. */
-  icon: "vibrate" | "crop";
   href: string;
 };
 
@@ -20,7 +18,6 @@ export const projects: readonly Project[] = [
       "Control your Mac with taps: bump the chassis or trackpad to trigger mute, lock, screenshot, and more. A free, native alternative to paid tap-control apps.",
     tags: ["macOS", "Swift", "open source"],
     status: "early",
-    icon: "vibrate",
     href: "https://github.com/Roshan-Rengadurai/bump",
   },
   {
@@ -30,7 +27,6 @@ export const projects: readonly Project[] = [
       "Screenshot to a clean, shareable link, straight to a storage bucket you own. Region capture, syntax-highlighted code snippets, and S3-compatible uploads with no middleman.",
     tags: ["macOS", "Swift", "S3"],
     status: "in progress",
-    icon: "crop",
     href: "https://github.com/Roshan-Rengadurai/nab",
   },
 ] as const;

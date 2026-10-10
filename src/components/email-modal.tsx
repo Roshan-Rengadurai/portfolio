@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { AlertCircle, CheckCircle2, Loader2, X } from "lucide-react";
 import { useMounted } from "@/lib/hooks";
 import { profile } from "@/data/profile";
 import { cn } from "@/lib/utils";
@@ -64,8 +63,7 @@ function FieldHeader({
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} role="alert" className="flex items-start gap-1.5 text-xs text-danger">
-      <AlertCircle className="mt-px size-3.5 shrink-0" strokeWidth={2} />
+    <p id={id} role="alert" className="text-xs text-danger">
       {message}
     </p>
   );
@@ -240,20 +238,16 @@ export function EmailModal() {
               <button
                 type="button"
                 onClick={close}
-                aria-label="Close"
-                className="focus-ring -mr-2 -mt-1 grid size-11 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-ink"
+                className="focus-ring -mr-2 -mt-1 h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-ink"
               >
-                <X className="size-5" strokeWidth={2} />
+                Close
               </button>
             </div>
 
             {status === "sent" ? (
               <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-4 text-center">
-                <span className="grid size-12 place-items-center rounded-full border border-border bg-surface-2 text-success">
-                  <CheckCircle2 className="size-6" strokeWidth={1.75} />
-                </span>
                 <div>
-                  <p className="font-medium text-ink">Message sent</p>
+                  <p className="font-medium text-success">Message sent</p>
                   <p className="mt-1 text-sm text-muted">
                     I&apos;ll reply to {replyTo || "your address"}.
                   </p>
@@ -384,9 +378,8 @@ export function EmailModal() {
                 {status === "error" && (
                   <p
                     role="alert"
-                    className="flex items-start gap-2 rounded-lg border border-danger/40 bg-danger/10 px-3 py-2.5 text-xs text-danger"
+                    className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2.5 text-xs text-danger"
                   >
-                    <AlertCircle className="mt-px size-3.5 shrink-0" strokeWidth={2} />
                     <span>
                       {errorMsg} You can also email me directly at{" "}
                       <a href={profile.links.email} className="link-underline font-medium">
@@ -409,19 +402,12 @@ export function EmailModal() {
                     type="submit"
                     disabled={status === "sending"}
                     className={cn(
-                      "focus-ring inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong sm:h-11",
+                      "focus-ring inline-flex h-12 items-center justify-center rounded-lg bg-accent px-5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong sm:h-11",
                       status === "sending" &&
                         "cursor-not-allowed opacity-60 hover:bg-accent"
                     )}
                   >
-                    {status === "sending" ? (
-                      <>
-                        <Loader2 className="size-4 animate-spin" strokeWidth={2} />
-                        Sending
-                      </>
-                    ) : (
-                      "Send message"
-                    )}
+                    {status === "sending" ? "Sending..." : "Send message"}
                   </button>
                 </div>
               </form>

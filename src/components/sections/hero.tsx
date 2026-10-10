@@ -1,6 +1,5 @@
 "use client";
 
-import { CalendarDays, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { AsciiFlow } from "@/components/ascii-flow";
 
@@ -45,18 +44,16 @@ export function Hero() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("open-email-modal"))}
-            className="focus-ring inline-flex h-12 items-center gap-2 rounded-lg bg-accent px-5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+            className="focus-ring inline-flex h-12 items-center rounded-lg bg-accent px-5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
           >
-            <Mail className="size-4" strokeWidth={2} />
             Email me
           </button>
           <a
             href={profile.links.cal}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-ring inline-flex h-12 items-center gap-2 rounded-lg border border-border-strong px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-2"
+            className="focus-ring inline-flex h-12 items-center rounded-lg border border-border-strong px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-2"
           >
-            <CalendarDays className="size-4" strokeWidth={2} />
             Book a call
           </a>
         </div>

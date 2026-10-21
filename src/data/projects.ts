@@ -29,4 +29,13 @@ export const projects: readonly Project[] = [
     status: "in progress",
     href: "https://github.com/Roshan-Rengadurai/nab",
   },
+  {
+    slug: "redo",
+    name: "redo",
+    blurb:
+      "Type redo after a command fails: it explains what went wrong and puts the fix on your prompt. Checks your PATH, repo, files and history instead of a typo list, and never runs anything destructive on its own.",
+    tags: ["CLI", "Python", "zsh · bash · PowerShell"],
+    status: "in progress",
+    href: "https://github.com/Roshan-Rengadurai/redo-cli",
+  },
 ] as const;

@@ -1,16 +1,42 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTheme } from "next-themes";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import { ProgramView, type ProgramName } from "@/components/console-programs";
+import {
+  LOGO,
+  cowsay,
+  formatUptime,
+  fortune,
+  toBinary,
+  toHex,
+} from "@/components/console-text";
 
 type Line =
   | { kind: "cmd"; text: string }
   | { kind: "out"; node: ReactNode };
 
 const PROMPT = ">";
+
+const PROGRAM_ALIASES: Record<string, ProgramName> = {
+  cmatrix: "cmatrix",
+  matrix: "cmatrix",
+  fluid: "fluid",
+  sim: "fluid",
+  life: "life",
+  gol: "life",
+  donut: "donut",
+  torus: "donut",
+};
+
+const COMMANDS = [
+  "about", "projects", "education", "github", "linkedin", "email", "theme",
+  "clear", "help", "cowsay", "fortune", "neofetch", "date", "echo", "bin",
+  "hex", "sudo", "cmatrix", "fluid", "life", "donut",
+];
 
 function ExtLink({ href, children }: { href: string; children: ReactNode }) {
   return (
@@ -33,6 +59,8 @@ export function Console() {
   const { setTheme, resolvedTheme } = useTheme();
   const [lines, setLines] = useState<Line[]>([]);
   const [value, setValue] = useState("");
+  const [program, setProgram] = useState<ProgramName | null>(null);
+  const exitProgram = useCallback(() => setProgram(null), []);
   const history = useRef<string[]>([]);
   const histIndex = useRef(-1);
 
@@ -80,7 +108,12 @@ export function Console() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [lines]);
+  }, [lines, program]);
+
+  useEffect(() => {
+    if (program) setFocused(false);
+    else inputRef.current?.focus();
+  }, [program]);
 
   const run = (raw: string) => {
     const input = raw.trim();
@@ -104,6 +137,15 @@ export function Console() {
               ["linkedin", "open my LinkedIn"],
               ["email", "get in touch"],
               ["theme", "switch between light and dark"],
+              ["neofetch", "system info, portfolio edition"],
+              ["cowsay [text]", "a cow says things"],
+              ["fortune", "a small engineering proverb"],
+              ["bin | hex <text>", "encode text as binary or hex"],
+              ["date", "current date and time"],
+              ["cmatrix", "digital rain"],
+              ["fluid", "ASCII fluid simulation"],
+              ["life", "Conway's Game of Life"],
+              ["donut", "spinning ASCII torus"],
               ["clear", "clear the screen"],
             ].map(([c, d]) => (
               <div key={c} className="contents">
@@ -199,17 +241,95 @@ export function Console() {
         break;
       }
 
+      case "cowsay":
+        print(<pre className="text-accent-strong">{cowsay(arg || fortune())}</pre>);
+        break;
+
+      case "fortune":
+        print(<span className="text-muted">{fortune()}</span>);
+        break;
+
+      case "neofetch": {
+        const nav = navigator as Navigator & {
+          userAgentData?: { platform?: string };
+        };
+        const rows: [string, string][] = [
+          ["os", nav.userAgentData?.platform || nav.platform || "unknown"],
+          ["lang", nav.language],
+          ["cores", String(nav.hardwareConcurrency ?? "?")],
+          ["screen", `${window.innerWidth}x${window.innerHeight}`],
+          ["theme", resolvedTheme ?? "unknown"],
+          ["projects", String(projects.length)],
+          ["uptime", formatUptime(performance.now() / 1000)],
+        ];
+        print(
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <pre className="text-accent-strong">{LOGO.join("\n")}</pre>
+            <div>
+              <div>
+                <span className="text-accent-strong">visitor</span>
+                <span className="text-muted">@</span>
+                <span className="text-accent-strong">
+                  {profile.name.split(" ")[0].toLowerCase()}
+                </span>
+              </div>
+              {rows.map(([k, val]) => (
+                <div key={k} className="text-muted">
+                  <span className="text-accent-strong">{k}</span>: {val}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+        break;
+      }
+
+      case "date":
+        print(<span className="text-muted">{new Date().toString()}</span>);
+        break;
+
+      case "echo":
+        print(<span className="text-muted">{arg}</span>);
+        break;
+
+      case "bin":
+      case "hex":
+        print(
+          <span className="break-all text-muted">
+            {arg
+              ? cmd.toLowerCase() === "bin"
+                ? toBinary(arg)
+                : toHex(arg)
+              : `usage: ${cmd} <text>`}
+          </span>
+        );
+        break;
+
+      case "sudo":
+        print(
+          <span className="text-muted">
+            visitor is not in the sudoers file. This incident will be reported.
+          </span>
+        );
+        break;
+
       case "clear":
         setLines([]);
         break;
 
-      default:
+      default: {
+        const prog = PROGRAM_ALIASES[cmd.toLowerCase()];
+        if (prog) {
+          setProgram(prog);
+          break;
+        }
         print(
           <span className="text-muted">
             No command named &ldquo;{cmd}&rdquo;. Type{" "}
             <span className="text-accent-strong">help</span> for the list.
           </span>
         );
+      }
     }
   };
 
@@ -219,6 +339,15 @@ export function Console() {
       run(value);
       setValue("");
       setCaretPos(0);
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      const prefix = value.trim().toLowerCase();
+      if (!prefix || /\s/.test(prefix)) return;
+      const hits = COMMANDS.filter((c) => c.startsWith(prefix));
+      if (hits.length === 1) {
+        setValue(hits[0]);
+        setCaretPos(hits[0].length);
+      }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       const h = history.current;
@@ -250,6 +379,9 @@ export function Console() {
         <span className="font-sans text-xs font-medium text-muted">Console</span>
       </div>
 
+      {program ? (
+        <ProgramView name={program} onExit={exitProgram} />
+      ) : (
       <div
         ref={scrollRef}
         aria-live="polite"
@@ -313,6 +445,7 @@ export function Console() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }

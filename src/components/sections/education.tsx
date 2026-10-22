@@ -3,7 +3,7 @@ import { Section } from "@/components/section";
 
 export function Education() {
   return (
-    <Section id="education" title="Education" aside="Class of 2027">
+    <Section id="education" title="Education">
       <ul className="divide-y divide-border border-y border-border">
         {profile.education.map((edu) => (
           <li

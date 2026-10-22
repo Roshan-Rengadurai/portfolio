@@ -4,7 +4,7 @@ import { Section } from "@/components/section";
 
 export function Projects() {
   return (
-    <Section id="projects" title="Projects" aside="Two in the open, more on the way.">
+    <Section id="projects" title="Projects">
       <ul className="divide-y divide-border border-y border-border">
         {projects.map((project) => (
           <li

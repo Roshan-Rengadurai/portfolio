@@ -7,7 +7,7 @@ export function SiteFooter() {
     <footer className="border-t border-border py-12 pb-32">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted">
-          {profile.name} &middot; {new Date().getFullYear()}
+          {profile.name}
         </p>
 
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
